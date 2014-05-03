@@ -25,11 +25,12 @@ class PageCacheURL:
         end = min(self.page_size, key.stop)
         page_end = int(ceil(float(key.stop) / self.page_size))
         output = cStringIO.StringIO()
+        total_length = key.stop - key.start
         for i in range(page_start, page_end):
             page = self.get_page(i)
             output.write(page[offset:end])
             offset = 0
-            end = min(self.page_size, key.stop - output.tell())
+            end = min(self.page_size, total_length - output.tell())
         output.seek(0)
         return output.read()
 
@@ -51,8 +52,11 @@ pprint.pprint(pcu.options)
 t = pcu.get_page(0)
 s = cStringIO.StringIO(t)
 print pcu[:2199]
-data = pcu[2199:2199+128*128*32]
-print len(data)
+data = pcu[2199:2199+128*128*64*32]
+print pcu.n_read
+data = pcu[2199:2199+128*128*64*32]
+print pcu.n_read
+print len(data), 128*128*64*32, len(data) - 128*128*64*32
 arr = np.fromstring(data, dtype=np.dtype([('index', 'i8'),
   ('x', '<f4'), ('y', '<f4'), ('z', '<f4'),
   ('vx', '<f4'), ('vy', '<f4'), ('vz', '<f4')]))
