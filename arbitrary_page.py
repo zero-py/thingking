@@ -3,6 +3,7 @@ import pprint
 import cStringIO
 from math import ceil, floor
 from functools32 import lru_cache
+import numpy as np
 
 PAGE_SIZE=1024*1024 # 1 mb
 MAX_PAGES=1024 # 1 gb
@@ -50,4 +51,9 @@ pprint.pprint(pcu.options)
 t = pcu.get_page(0)
 s = cStringIO.StringIO(t)
 print pcu[:2199]
-
+data = pcu[2199:2199+128*128*32]
+print len(data)
+arr = np.fromstring(data, dtype=np.dtype([('index', 'i8'),
+  ('x', '<f4'), ('y', '<f4'), ('z', '<f4'),
+  ('vx', '<f4'), ('vy', '<f4'), ('vz', '<f4')]))
+print arr['x']
