@@ -2,7 +2,7 @@ import requests
 import pprint
 import cStringIO
 from math import ceil, floor
-from functools32 import lru_cache
+from yt.extern.functools32 import lru_cache
 import numpy as np
 
 PAGE_SIZE=1024*1024 # 1 mb
