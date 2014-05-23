@@ -22,15 +22,14 @@ class PageCacheURL:
         # We assume this is in bytes
         page_start = int(floor(float(key.start) / self.page_size))
         offset = key.start % self.page_size
-        end = min(self.page_size, key.stop)
         page_end = int(ceil(float(key.stop) / self.page_size))
         output = cStringIO.StringIO()
         total_length = key.stop - key.start
         for i in range(page_start, page_end):
+            end = min(self.page_size, key.stop-i*self.page_size)
             page = self.get_page(i)
             output.write(page[offset:end])
             offset = 0
-            end = min(self.page_size, total_length - output.tell())
         output.seek(0)
         return output.read()
 

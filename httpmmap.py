@@ -12,15 +12,13 @@ class HTTPArray(PageCacheURL):
 
     """docstring for HTTPArray"""
 
-    def __init__(self, base_url, dtype='uint8', offset=0, shape=None,
+    def __init__(self, base_url, dtype=None, offset=0, shape=None,
                  order='C', page_size=PAGE_SIZE):
         self.base_url = base_url
-        self.page_size = PAGE_SIZE
-        r = requests.options(base_url)
-        self.options = r.headers
-        self.n_read = 0
+        if dtype is None:
+            dtype = np.dtype([("data", np.str)])
         self.dtype = dtype
-        self.offset = offset
+        self.header_offset = offset
         self.shape = None
         self.order = None
         self.itemsize = self.dtype.itemsize
@@ -30,10 +28,12 @@ class HTTPArray(PageCacheURL):
         if not isinstance(key, slice):
             raise NotImplementedError
 
-        byte_start = self.offset + key.start*self.itemsize
-        byte_end = self.offset + key.stop*self.itemsize
+        #print 'Keys: %i, %i' % (key.start, key.stop)
+        #print 'Itemsize: %i, header_offset: %i' % (self.itemsize, self.header_offset)
+        byte_start = self.header_offset + key.start*self.itemsize
+        byte_end = self.header_offset + key.stop*self.itemsize
+        #print 'Reading from %i to %i' % (byte_start, byte_end)
         raw_data = self.pcu[byte_start:byte_end]
         arr = np.fromstring(raw_data, dtype=self.dtype)
         return arr
-
 
