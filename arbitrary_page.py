@@ -2,7 +2,7 @@ import requests
 import pprint
 import cStringIO
 from math import ceil, floor
-from yt.extern.functools32 import lru_cache
+from functools32 import lru_cache
 import numpy as np
 
 PAGE_SIZE=1024*1024 # 1 mb
@@ -15,7 +15,7 @@ class PageCacheURL:
         r = requests.options(base_url)
         self.options = r.headers
         self.n_read = 0
-        
+
     def __getitem__(self, key):
         if not isinstance(key, slice):
             raise NotImplementedError
@@ -47,17 +47,18 @@ class PageCacheURL:
         self.n_read += 1
         return r.content
 
-pcu = PageCacheURL("http://localhost/test.bin")
-pprint.pprint(pcu.options)
-t = pcu.get_page(0)
-s = cStringIO.StringIO(t)
-print pcu[:2199]
-data = pcu[2199:2199+128*128*64*32]
-print pcu.n_read
-data = pcu[2199:2199+128*128*64*32]
-print pcu.n_read
-print len(data), 128*128*64*32, len(data) - 128*128*64*32
-arr = np.fromstring(data, dtype=np.dtype([('index', 'i8'),
-  ('x', '<f4'), ('y', '<f4'), ('z', '<f4'),
-  ('vx', '<f4'), ('vy', '<f4'), ('vz', '<f4')]))
-print arr['x']
+if __name__ == "__main__":
+    pcu = PageCacheURL("http://localhost/test.bin")
+    pprint.pprint(pcu.options)
+    t = pcu.get_page(0)
+    s = cStringIO.StringIO(t)
+    print pcu[:2199]
+    data = pcu[2199:2199+128*128*64*32]
+    print pcu.n_read
+    data = pcu[2199:2199+128*128*64*32]
+    print pcu.n_read
+    print len(data), 128*128*64*32, len(data) - 128*128*64*32
+    arr = np.fromstring(data, dtype=np.dtype([('index', 'i8'),
+                                              ('x', '<f4'), ('y', '<f4'), ('z', '<f4'),
+                                              ('vx', '<f4'), ('vy', '<f4'), ('vz', '<f4')]))
+    print arr['x']
