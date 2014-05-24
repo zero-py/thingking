@@ -15,8 +15,16 @@ class PageCacheURL:
         r = requests.options(base_url)
         self.options = r.headers
         self.n_read = 0
+        # For debugging
+        self.last_r = r
+
+        r = requests.get( self.base_url, headers=dict(Range = "bytes=%s-%s" %
+                                              (0, 1)))
+        self.total_size = int(r.headers['content-range'].split('/')[-1])
 
     def __getitem__(self, key):
+        if isinstance(key, int):
+            key = slice(key, key+1)
         if not isinstance(key, slice):
             raise NotImplementedError
         # We assume this is in bytes
@@ -44,6 +52,8 @@ class PageCacheURL:
                 requests.codes.partial_content):
             raise KeyError(r)
         self.n_read += 1
+        # For debugging
+        self.last_r = r
         return r.content
 
 if __name__ == "__main__":
