@@ -27,6 +27,10 @@ class HTTPArray(PageCacheURL):
         self.pcu = PageCacheURL(base_url, page_size=page_size)
 
     def __getitem__(self, key):
+        mask = None
+        if type(key) == np.ndarray:
+            mask = key
+            key = slice(None, None)
         if not isinstance(key, slice):
             raise NotImplementedError
 
@@ -45,5 +49,8 @@ class HTTPArray(PageCacheURL):
         #print 'Reading from %i to %i' % (byte_start, byte_end)
         raw_data = self.pcu[byte_start:byte_end]
         arr = np.fromstring(raw_data, dtype=self.dtype)
-        return arr
+        if mask is None:
+            return arr
+        else:
+            return arr[mask]
 
