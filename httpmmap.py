@@ -1,14 +1,8 @@
-import requests
-import pprint
-import cStringIO
-from math import ceil, floor
-from functools32 import lru_cache
 import numpy as np
+from arbitrary_page import PageCacheURL, PAGE_SIZE
 
-from arbitrary_page import PageCacheURL, PAGE_SIZE, MAX_PAGES
 
-
-class HTTPArray(PageCacheURL):
+class HTTPArray(object):
 
     """docstring for HTTPArray"""
 
@@ -34,8 +28,6 @@ class HTTPArray(PageCacheURL):
         if not isinstance(key, slice):
             raise NotImplementedError
 
-        #print 'Keys: %i, %i' % (key.start, key.stop)
-        #print 'Itemsize: %i, header_offset: %i' % (self.itemsize, self.header_offset)
         if key.start is None:
             key = slice(0, key.stop)
         if key.stop is None:
@@ -46,7 +38,6 @@ class HTTPArray(PageCacheURL):
             key = slice(key.start, self.shape + key.stop)
         byte_start = self.header_offset + key.start*self.itemsize
         byte_end = self.header_offset + key.stop*self.itemsize
-        #print 'Reading from %i to %i' % (byte_start, byte_end)
         raw_data = self.pcu[byte_start:byte_end]
         arr = np.fromstring(raw_data, dtype=self.dtype)
         if mask is None:

@@ -12,7 +12,7 @@ setup(name='thingking',
           ("Topic :: Software Development :: Libraries :: Python Modules"),
       ],
       keywords='data',
-      author='Matthew Turk <matthewturk@gmail.com>, Samuel Skillman <samskillman@gmail.com>',
+      author='Matthew Turk <matthewturk@gmail.com>, Samuel Skillman <samskillman@gmail.com>, Michael S. Warren <mswarren@gmail.com>',
       license='BSD',
       packages=find_packages(),
       )
