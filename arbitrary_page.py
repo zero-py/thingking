@@ -41,6 +41,11 @@ class PageCacheURL:
         output.seek(0)
         return output.read()
 
+    def get_current_page(self, position):
+        page = int(floor(float(position) / self.page_size))
+        start = page*self.page_size 
+        return start, self.get_page(page)
+
     @lru_cache(MAX_PAGES)
     def get_page(self, page_number):
         start = self.page_size * page_number
