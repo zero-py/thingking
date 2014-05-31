@@ -33,9 +33,13 @@ class HTTPArray(object):
 
     def __getitem__(self, key):
         mask = None
-        if type(key) == int:
-            key = slice(key, key+1)
-        if type(key) == np.ndarray:
+        kt = type(key)
+        if kt == int or kt == np.int64 or kt == np.int32 or kt == np.int:
+            if key == -1:
+                key = slice(-1, None)
+            else:
+                key = slice(key, key+1)
+        elif type(key) == np.ndarray:
             mask = key
             key = slice(None, None)
         if not isinstance(key, slice):

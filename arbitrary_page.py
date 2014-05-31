@@ -20,7 +20,11 @@ class PageCacheURL:
 
         r = requests.get( self.base_url, headers=dict(Range = "bytes=%s-%s" %
                                               (0, 1)))
-        self.total_size = int(r.headers['content-range'].split('/')[-1])
+        try:
+            self.total_size = int(r.headers['content-range'].split('/')[-1])
+        except:
+            self.total_size = int(r.headers['content-length'])
+
 
     def __getitem__(self, key):
         if isinstance(key, int):
