@@ -40,8 +40,8 @@ class HTTPArray(object):
             else:
                 key = slice(key, key+1)
         elif type(key) == np.ndarray:
-            mask = key
-            key = slice(None, None)
+            mask = key - key.min()
+            key = slice(key.min(), key.max()+1)
         if not isinstance(key, slice):
             raise NotImplementedError
 
