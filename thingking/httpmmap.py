@@ -40,8 +40,16 @@ class HTTPArray(object):
             else:
                 key = slice(key, key+1)
         elif type(key) == np.ndarray:
-            mask = key - key.min()
-            key = slice(key.min(), key.max()+1)
+            # We do it all here.
+            arr = np.empty(key.size, dtype=self.dtype)
+            print "Reading", arr.size * self.itemsize,
+            print "instead of", (key.max() - key.min())*self.itemsize
+            for i, v in enumerate(key):
+                byte_start = self.header_offset + v * self.itemsize
+                byte_end = byte_start + self.itemsize
+                arr[i] = np.fromstring(self.pcu[byte_start:byte_end],
+                                dtype=self.dtype)
+            return arr
         if not isinstance(key, slice):
             raise NotImplementedError
 
