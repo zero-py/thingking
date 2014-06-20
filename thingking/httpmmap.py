@@ -42,8 +42,6 @@ class HTTPArray(object):
         elif type(key) == np.ndarray:
             # We do it all here.
             arr = np.empty(key.size, dtype=self.dtype)
-            print "Reading", arr.size * self.itemsize,
-            print "instead of", (key.max() - key.min())*self.itemsize
             for i, v in enumerate(key):
                 byte_start = self.header_offset + v * self.itemsize
                 byte_end = byte_start + self.itemsize
