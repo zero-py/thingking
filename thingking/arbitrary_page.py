@@ -10,6 +10,10 @@ except ImportError:
     except ImportError:
         raise
 import numpy as np
+import logging
+
+rlogger = logging.getLogger("requests.packages.urllib3.connectionpool")
+rlogger.setLevel('WARNING')
 
 PAGE_SIZE=1024*1024 # 1 mb
 MAX_PAGES=1024 # 1 gb
