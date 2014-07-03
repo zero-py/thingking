@@ -4,9 +4,19 @@ import warnings
 from .arbitrary_page import PageCacheURL, PAGE_SIZE
 
 class HTTPArray(object):
+    """
+    This class implements a numpy array interface that works over HTTP.  It
+    utilizes the PageCacheURL to manage storing subsections of the array.  In
+    most situations it should appear similar or identical to a numpy array,
+    although it will not implement the full range of functionality, and will
+    also not support the buffer interface.  Note that like the PageCacheURL, it
+    will require HTTP Range support on the server for best performance.
 
-    """docstring for HTTPArray"""
-
+    base_url is the base at which the data file to be mmap'd can be found.
+    dtype operates as per usual for numpy, offset describes at which point to
+    start the array reading, and shape and order operate as they do for numpy
+    arrays.  page_size governs how many bytes to read at a given time.
+    """
     def __init__(self, base_url, dtype=None, offset=0, shape=None,
                  order='C', page_size=PAGE_SIZE):
         self.base_url = base_url
@@ -62,7 +72,12 @@ class HTTPArray(object):
 
 
 class httpfile(object):
-    """docstring for httpfile"""
+    """
+    This implements a file-like mmap-type object utilizing a PageCacheURL for
+    remote files, developed with a LRU cache for reading pages and caching them
+    locally.  base_url is the file to map, and page_size is the size in bytes
+    of a given page to read.
+    """
     closed = False
     _cpos = 0  # Current position
     writeable = False
