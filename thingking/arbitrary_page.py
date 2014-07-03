@@ -15,6 +15,14 @@ PAGE_SIZE=1024*1024 # 1 mb
 MAX_PAGES=1024 # 1 gb
 
 class PageCacheURL:
+    """
+    This class sets up a mechanism for caching pages from a URL, using HTTP
+    range queries and an LRU-cache for invalidating cached sections of the
+    page.  base_url refers to the URL for the page which we'll be
+    incrementally caching, and page_size is the size (in bytes) of the page
+    chunks that are cached.  By default, the number of pages cached is
+    1024, which means up to 1 gigabyte by default.
+    """
     def __init__(self, base_url, page_size = PAGE_SIZE):
         self.base_url = base_url
         self.page_size = PAGE_SIZE
@@ -52,12 +60,19 @@ class PageCacheURL:
         return output.read()
 
     def get_current_page(self, position):
+        """
+        This function returns the starting position and the page at a given
+        position.
+        """
         page = int(floor(float(position) / self.page_size))
         start = page*self.page_size 
         return start, self.get_page(page)
 
     @lru_cache(MAX_PAGES)
     def get_page(self, page_number):
+        """
+        This returns a particular page, by page number.
+        """
         start = self.page_size * page_number
         end = start + self.page_size
         headers = dict(Range = "bytes=%s-%s" % (start, end))
