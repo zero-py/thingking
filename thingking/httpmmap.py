@@ -1,15 +1,7 @@
 import numpy as np
-from arbitrary_page import PageCacheURL, PAGE_SIZE
 import warnings
-from numpy import uint8, ndarray, dtype
-import sys
-from io import BufferedReader, BufferedIOBase
-import array
 
-import numpy as np
-
-dtypedescr = dtype
-
+from .arbitrary_page import PageCacheURL, PAGE_SIZE
 
 class HTTPArray(object):
 
