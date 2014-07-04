@@ -2,3 +2,4 @@
 
 from .arbitrary_page import PageCacheURL
 from .httpmmap import HTTPArray, httpfile
+from .utils import loadtxt
