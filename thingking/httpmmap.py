@@ -192,6 +192,8 @@ class httpfile(object):
             if newline != 0:
                 readsize += newline
                 break
+            elif chunk[0] == "\n":
+                readsize += 1
             else:
                 readsize += len(chunk)
         data = self.pcu[self._cpos:self._cpos+readsize]
