@@ -1,3 +1,9 @@
+thingking
+=========
+
+
+
+
 http://www.physics.ohio-state.edu/~bcd/humor/paging.game.html
 
 28-Feb-80 15:38:18-EST,00004278;000000000001

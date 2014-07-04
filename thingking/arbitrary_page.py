@@ -3,10 +3,10 @@ import pprint
 import cStringIO
 from math import ceil, floor
 try:
-    from yt.extern.functools32 import lru_cache
+    from functools32 import lru_cache
 except ImportError:
     try:
-        from functools32 import lru_cache
+        from yt.extern.functools32 import lru_cache
     except ImportError:
         raise
 import numpy as np
@@ -16,7 +16,7 @@ rlogger = logging.getLogger("requests.packages.urllib3.connectionpool")
 rlogger.setLevel('WARNING')
 
 PAGE_SIZE=1024*1024 # 1 mb
-MAX_PAGES=1024 # 1 gb
+MAX_PAGES=4*1024 # 1 gb
 
 class PageCacheURL:
     """

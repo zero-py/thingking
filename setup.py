@@ -15,5 +15,5 @@ setup(name='thingking',
       author='Matthew Turk <matthewturk@gmail.com>, Samuel Skillman <samskillman@gmail.com>, Michael S. Warren <mswarren@gmail.com>',
       license='BSD',
       packages=find_packages(),
-      install_requires=["requests", "numpy"],
+      install_requires=["requests", "numpy", "functools32"],
       )

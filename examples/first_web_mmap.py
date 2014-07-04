@@ -1,4 +1,7 @@
-# This simple example demonstrates
+# This was our first example of getting remote memmap-like interface to binary
+# data on the web.  It is non-functional unless you are currently hosting data
+# in the right place, and a runtime error is thrown if you try to run it. 
+raise RuntimeError("Not to be run, just to be read.")
 
 from httpmmap import HTTPArray
 import numpy as np
