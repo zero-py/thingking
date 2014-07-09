@@ -32,6 +32,7 @@ class HTTPArray(object):
         else:
             shape = self.pcu.total_size/self.itemsize
         self.shape = shape
+        self._size = shape
 
     def __getitem__(self, key):
         mask = None
@@ -70,6 +71,12 @@ class HTTPArray(object):
         else:
             return arr[mask]
 
+    @property
+    def size(self):
+        return self._size
+
+    def __len__(self):
+        return self.size
 
 class httpfile(object):
     """
