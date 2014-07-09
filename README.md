@@ -1,10 +1,37 @@
+[thingking](http://dx.doi.org/10.5281/zenodo.10773)  
+![doi](http://zenodo.org/badge/doi/10.5281/zenodo.10773.png)
+
+ThingKing assigns a byte-for-byte correlation between a resource on
+the World Wide Web (WWW) identified by its Uniform Resource Locator
+(URL) and a Python virtual memory buffer.  The PageCacheURL class
+defines an LRU mechanism for caching pages from a URL, with a
+default page size of 1 MB and an active pool of 1024 pages.  The
+HTTPArray class extends this model to numpy arrays, while httpfile
+supplies a file-like interface.
+
+Once the URL is mapped to an HTTPArray, an application may index the
+array as if it was present in main memory.  The interface also enables
+"lazy loading", using a small amount of RAM even for very large
+resources.
+
+Copyright (c) 2014, Matthew J. Turk, Samuel W. Skillman and Michael S. Warren  
+All rights reserved.
+
+__thingking__ is distributed under the terms of the BSD 3-clause License.  
+The full license is in the file COPYING.txt, distributed with this software.
+
+For use in research and related activities, please cite the following
+as appropriate:
+
+Matthew J. Turk, Samuel W. Skillman and Michael S. Warren
+(2014). ThingKing: Memory Mapping the World Wide Web. Zenodo.
+[doi:10.5281/zenodo.10773](http://dx.doi.org/10.5281/zenodo.10773)
+
+
 thingking
 =========
 
-
-
-
-http://www.physics.ohio-state.edu/~bcd/humor/paging.game.html
+[http://www.physics.ohio-state.edu/~bcd/humor/paging.game.html](http://www.physics.ohio-state.edu/~bcd/humor/paging.game.html)
 
 28-Feb-80 15:38:18-EST,00004278;000000000001
    --------

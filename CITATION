@@ -1,0 +1,15 @@
+To cite thingking, please use:
+
+Matthew J. Turk, Samuel W. Skillman and Michael S. Warren
+(2014). ThingKing: Memory Mapping the World Wide Web. Zenodo.
+doi:10.5281/zenodo.10773
+
+@misc{turk14,
+  title = {ThingKing: Memory Mapping the World Wide Web},
+  url = {http://bitbucket.org/zeropy/thingking},
+  doi = {10.5281/zenodo.10773},
+  publisher = {Zenodo},
+  author = {Matthew J. Turk and Samuel W. Skillman and Michael S. Warren},
+  month = July,
+  year = {2014}
+}
