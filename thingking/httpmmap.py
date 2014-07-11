@@ -36,8 +36,9 @@ class HTTPArray(object):
 
     def __getitem__(self, key):
         mask = None
+        orig_key = key
         kt = type(key)
-        if kt == int or kt == np.int64 or kt == np.int32 or kt == np.int:
+        if isinstance(key, (int, np.integer)):
             if key == -1:
                 key = slice(-1, None)
             else:
@@ -48,7 +49,7 @@ class HTTPArray(object):
             for i, v in enumerate(key):
                 byte_start = self.header_offset + v * self.itemsize
                 byte_end = byte_start + self.itemsize
-                arr[i] = np.fromstring(self.pcu[byte_start:byte_end],
+                arr[i] = np.fromstring(self.pcu[byte_start, byte_end],
                                 dtype=self.dtype)
             return arr
         if not isinstance(key, slice):
@@ -64,7 +65,7 @@ class HTTPArray(object):
             key = slice(key.start, self.shape + key.stop)
         byte_start = self.header_offset + key.start*self.itemsize
         byte_end = self.header_offset + key.stop*self.itemsize
-        raw_data = self.pcu[byte_start:byte_end]
+        raw_data = self.pcu[byte_start, byte_end]
         arr = np.fromstring(raw_data, dtype=self.dtype)
         if mask is None:
             return arr
@@ -155,7 +156,7 @@ class httpfile(object):
         start = self._cpos
         end = min(self._cpos+num, self.size)
         print 'Reading from %i to %i' % (start, end)
-        data = self.pcu[start:end]
+        data = self.pcu[start, end]
         self._cpos = end
         return data
 
@@ -173,7 +174,7 @@ class httpfile(object):
         """
         start = self._cpos+offset
         end = min(self._cpos+offset+num, self.size)
-        data = self.pcu[start:end]
+        data = self.pcu[start, end]
         return data
 
     def read_byte(self):
@@ -203,7 +204,7 @@ class httpfile(object):
                 readsize += 1
             else:
                 readsize += len(chunk)
-        data = self.pcu[self._cpos:self._cpos+readsize]
+        data = self.pcu[self._cpos, self._cpos+readsize]
         self._cpos += readsize + 1
         return data
 

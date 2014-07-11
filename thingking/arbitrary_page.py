@@ -45,18 +45,23 @@ class PageCacheURL:
 
 
     def __getitem__(self, key):
-        if isinstance(key, int):
-            key = slice(key, key+1)
-        if not isinstance(key, slice):
+        if isinstance(key, tuple):
+            start, stop = key
+        elif isinstance(key, (int, np.integer)):
+            start, stop = key, key + 1
+        elif isinstance(key, slice):
+            start = key.start
+            stop = key.end
+        else:
             raise NotImplementedError
         # We assume this is in bytes
-        page_start = int(floor(float(key.start) / self.page_size))
-        offset = key.start % self.page_size
-        page_end = int(ceil(float(key.stop) / self.page_size))
+        page_start = int(floor(float(start) / self.page_size))
+        offset = start % self.page_size
+        page_end = int(ceil(float(stop) / self.page_size))
         output = cStringIO.StringIO()
-        total_length = key.stop - key.start
+        total_length = stop - start
         for i in range(page_start, page_end):
-            end = min(self.page_size, key.stop-i*self.page_size)
+            end = min(self.page_size, stop-i*self.page_size)
             page = self.get_page(i)
             output.write(page[offset:end])
             offset = 0
