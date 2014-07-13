@@ -10,7 +10,7 @@ cdef int handler(void *fault_address, int serious):
 
 cdef int fault_handler(void *fault_address, void *user_arg):
     print "Fault address", <np.int64_t> (fault_address - <void*>my_mmap.data)
-    mprotect(<void *> my_mmap.data, 1, PROT_READ | PROT_WRITE)
+    mprotect(<void *> fault_address, 1, PROT_READ | PROT_WRITE)
     return 1
 
 def setup(mmap_obj, page_to_protect):
@@ -24,6 +24,5 @@ def setup(mmap_obj, page_to_protect):
     my_mmap = (<mmap_object*> (<PyObject*> mmap_obj))[0]
     sigsegv_register(&thingking_dispatch, my_mmap.data, my_mmap.size,
                      &fault_handler, &my_mmap)
-    print "RV2", rv
     rv = mprotect(<void *> my_mmap.data, my_mmap.size, PROT_NONE)
     print "RV3", rv
