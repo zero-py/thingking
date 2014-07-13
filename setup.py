@@ -1,8 +1,16 @@
 import os
 from setuptools import setup, find_packages
+from distutils.extension import Extension
+from Cython.Build import cythonize
+from Cython.Build.Dependencies import create_extension_list
 version = '1.0.2'
 README = os.path.join(os.path.dirname(__file__), 'README.md')
 long_description = open(README).read() + 'nn'
+source_files = ["thingking/pagefault.pyx"]
+extensions = [Extension("thingking/pagefault", source_files,
+                         include_dirs = ["/home/mturk/yt-x86_64/include"],
+                         library_dirs = ["/home/mturk/yt-x86_64/lib"],
+                         libraries = ["sigsegv"])]
 setup(name='thingking',
       version=version,
       description=("A memory map for the World Wide Web"),
@@ -16,4 +24,5 @@ setup(name='thingking',
       license='BSD',
       packages=find_packages(),
       install_requires=["requests", "numpy", "functools32"],
-      )
+      ext_modules = cythonize(extensions),
+)
