@@ -10,6 +10,7 @@ cdef int handler(void *fault_address, int serious):
 
 cdef int fault_handler(void *fault_address, void *user_arg):
     print "Fault address", <np.int64_t> (fault_address - <void*>my_mmap.data)
+    mprotect(<void *> my_mmap.data, 1, PROT_READ | PROT_WRITE)
     return 1
 
 def setup(mmap_obj, page_to_protect):
