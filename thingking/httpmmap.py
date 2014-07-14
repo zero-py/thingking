@@ -245,9 +245,10 @@ class httpfile(object):
         elif whence == 1:
             self._cpos += pos
         elif whence == 2:
-            raise NotImplementedError()
+            return -1
         else:
-            raise NotImplementedError()
+            return -1
+        return self._cpos
 
     def size(self):
         """
