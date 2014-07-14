@@ -241,14 +241,15 @@ class httpfile(object):
         os.SEEK_END or 2 (seek relative to the files end).
         """
         if whence == os.SEEK_SET:
-            self._cpos = pos
+            self._cpos = min(pos, self.size)
         elif whence == os.SEEK_CUR:
             self._cpos += pos
+            self._cpos = min(self._cpos, self.size)
         elif whence == os.SEEK_END:
-            self._cpos = self.size - pos
+            self._cpos = max(self.size - pos, 0)
         else:
             return -1
-        return self._cpos
+        return 0
 
     def size(self):
         """

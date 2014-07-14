@@ -5,7 +5,8 @@ cdef object cookies = {}
 
 cdef ssize_t tk_read(void *cookie, char *buf, size_t size) nogil:
     global cookies
-    cdef int i, osize
+    cdef int i
+    cdef ssize_t osize
     cdef char* b
     with gil:
         tk_obj = cookies[(<int*>cookie)[0]]
@@ -14,8 +15,7 @@ cdef ssize_t tk_read(void *cookie, char *buf, size_t size) nogil:
         osize = len(s)
     for i in range(osize):
         buf[i] = b[i]
-    cdef ssize_t rv = osize
-    return rv
+    return osize
 
 cdef ssize_t tk_write(void *cookie, const char *buf, size_t size) nogil:
     # We do not allow writing.
