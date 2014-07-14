@@ -1,28 +1,38 @@
-cimport numpy as np
-import numpy as np
-import mmap
-cdef sigsegv_dispatcher thingking_dispatch
-cdef object my_mmap_obj
-cdef mmap_object my_mmap
+from thingking.httpmmap import httpfile
 
-cdef int handler(void *fault_address, int serious):
-    return sigsegv_dispatch(&thingking_dispatch, fault_address);
+cdef ssize_t tk_read(void *cookie, char *buf, size_t size):
+    cdef object tk_obj = <object>(<PyObject*> cookie)
+    b = tk_obj.read(size)
+    for i in range(len(b)):
+        buf[i] = b[i]
+    return len(b)
 
-cdef int fault_handler(void *fault_address, void *user_arg):
-    print "Fault address", <np.int64_t> (fault_address - <void*>my_mmap.data)
-    mprotect(<void *> fault_address, 1, PROT_READ | PROT_WRITE)
-    return 1
+cdef ssize_t tk_write(void *cookie, const char *buf, size_t size):
+    # We do not allow writing.
+    return 0
 
-def setup(mmap_obj, page_to_protect):
-    cdef int rv
-    if not isinstance(mmap_obj, mmap.mmap):
+cdef int tk_seek(void *cookie, off64_t *offset, int whence):
+    cdef object tk_obj = <object>(<PyObject*> cookie)
+    cdef int rv = tk_obj.seek(offset[0], whence)
+    offset[0] = tk_obj._cpos
+    return rv
+
+cdef int tk_close(void *cookie):
+    # We only decref
+    cdef object tk_obj = <object>(<PyObject*>cookie)
+    Py_DECREF(tk_obj)
+
+cdef cookie_io_functions_t tk_cookie_funcs
+tk_cookie_funcs.read = tk_read
+tk_cookie_funcs.write = tk_write
+tk_cookie_funcs.seek = tk_seek
+tk_cookie_funcs.close = tk_close
+
+def thingking_to_FILE(tk):
+    if not isinstance(tk, httpfile):
         raise RuntimeError
-    sigsegv_init(&thingking_dispatch)
-    sigsegv_install_handler(&handler)
-    global my_mmap, my_mmap_obj
-    my_mmap_obj = mmap_obj
-    my_mmap = (<mmap_object*> (<PyObject*> mmap_obj))[0]
-    sigsegv_register(&thingking_dispatch, my_mmap.data, my_mmap.size,
-                     &fault_handler, &my_mmap)
-    rv = mprotect(<void *> my_mmap.data, my_mmap.size, PROT_NONE)
-    print "RV3", rv
+    Py_INCREF(tk)
+    cdef void* cookie = <void*>(<PyObject*>tk)
+    cdef FILE *nf = fopencookie(cookie, "rb", tk_cookie_funcs)
+    cdef object f = <object>PyFile_FromFile(nf, tk.name, "rb", NULL)
+    return f
