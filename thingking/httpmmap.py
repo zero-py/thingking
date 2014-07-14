@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import warnings
 
 from .arbitrary_page import PageCacheURL, PAGE_SIZE
@@ -240,12 +241,12 @@ class httpfile(object):
         are os.SEEK_CUR or 1 (seek relative to the current position) and
         os.SEEK_END or 2 (seek relative to the files end).
         """
-        if whence == 0:
+        if whence == os.SEEK_SET:
             self._cpos = pos
-        elif whence == 1:
+        elif whence == os.SEEK_CUR:
             self._cpos += pos
-        elif whence == 2:
-            return -1
+        elif whence == os.SEEK_END:
+            self._cpos = self.size - pos
         else:
             return -1
         return self._cpos
