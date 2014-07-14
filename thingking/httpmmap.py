@@ -156,7 +156,6 @@ class httpfile(object):
         """
         start = self._cpos
         end = min(self._cpos+num, self.size)
-        print 'Reading from %i to %i' % (start, end)
         data = self.pcu[start, end]
         self._cpos = end
         return data
