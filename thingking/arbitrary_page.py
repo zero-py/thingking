@@ -29,7 +29,7 @@ class PageCacheURL:
     """
     def __init__(self, base_url, page_size = PAGE_SIZE):
         self.base_url = base_url
-        self.page_size = PAGE_SIZE
+        self.page_size = page_size
         r = requests.options(base_url)
         self.options = r.headers
         self.n_read = 0
@@ -41,7 +41,10 @@ class PageCacheURL:
         try:
             self.total_size = int(r.headers['content-range'].split('/')[-1])
         except:
+            # Because it's not there ...
             self.total_size = int(r.headers['content-length'])
+            rlogger.warning("Cannot use range requests on %s", self.base_url)
+            self.page_size = self.total_size
 
 
     def __getitem__(self, key):
