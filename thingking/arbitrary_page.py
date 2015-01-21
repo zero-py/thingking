@@ -36,8 +36,8 @@ class PageCacheURL:
         # For debugging
         self.last_r = r
 
-        r = requests.get( self.base_url, headers=dict(Range = "bytes=%s-%s" %
-                                              (0, 1)))
+        headers = {'Range':"bytes=%s-%s" % (0, 1)}
+        r = requests.get( self.base_url, headers=headers)
         try:
             self.total_size = int(r.headers['content-range'].split('/')[-1])
         except:
@@ -45,7 +45,6 @@ class PageCacheURL:
             self.total_size = int(r.headers['content-length'])
             rlogger.warning("Cannot use range requests on %s", self.base_url)
             self.page_size = self.total_size
-
 
     def __getitem__(self, key):
         if isinstance(key, tuple):
@@ -87,7 +86,7 @@ class PageCacheURL:
         """
         start = self.page_size * page_number
         end = start + self.page_size
-        headers = dict(Range = "bytes=%s-%s" % (start, end))
+        headers = {'Range': "bytes=%s-%s" % (start, end)}
         r = requests.get(self.base_url, headers = headers)
         if r.status_code not in (
                 requests.codes.ok,
