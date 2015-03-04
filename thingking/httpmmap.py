@@ -148,12 +148,13 @@ class httpfile(object):
         """
         raise NotImplementedError()
 
-    def read(self, num):
+    def read(self, num = None):
         """
         Return a string containing up to num bytes starting from the current
         file position; the file position is updated to point after the bytes
         that were returned.
         """
+        if num is None: num = self.size
         start = self._cpos
         end = min(self._cpos+num, self.size)
         data = self.pcu[start, end]
