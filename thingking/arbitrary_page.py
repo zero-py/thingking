@@ -1,12 +1,12 @@
 import requests
 import pprint
-import cStringIO
+import io
 from math import ceil, floor
 try:
-    from functools32 import lru_cache
+    from functools import lru_cache
 except ImportError:
     try:
-        from yt.extern.functools32 import lru_cache
+        from functools32 import lru_cache
     except ImportError:
         raise
 import numpy as np
@@ -60,7 +60,7 @@ class PageCacheURL:
         page_start = int(floor(float(start) / self.page_size))
         offset = start % self.page_size
         page_end = int(ceil(float(stop) / self.page_size))
-        output = cStringIO.StringIO()
+        output = io.BytesIO()
         total_length = stop - start
         for i in range(page_start, page_end):
             end = min(self.page_size, stop-i*self.page_size)
@@ -101,14 +101,14 @@ if __name__ == "__main__":
     pcu = PageCacheURL("http://localhost/test.bin")
     pprint.pprint(pcu.options)
     t = pcu.get_page(0)
-    s = cStringIO.StringIO(t)
-    print pcu[:2199]
+    s = io.BytesIO(t)
+    print(pcu[:2199])
     data = pcu[2199:2199+128*128*64*32]
-    print pcu.n_read
+    print(pcu.n_read)
     data = pcu[2199:2199+128*128*64*32]
-    print pcu.n_read
-    print len(data), 128*128*64*32, len(data) - 128*128*64*32
+    print(pcu.n_read)
+    print(len(data), 128*128*64*32, len(data) - 128*128*64*32)
     arr = np.fromstring(data, dtype=np.dtype([('index', 'i8'),
                                               ('x', '<f4'), ('y', '<f4'), ('z', '<f4'),
                                               ('vx', '<f4'), ('vy', '<f4'), ('vz', '<f4')]))
-    print arr['x']
+    print(arr['x'])

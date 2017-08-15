@@ -1,5 +1,5 @@
-from httpmmap import HTTPArray
-from cStringIO import StringIO
+from .httpmmap import HTTPArray
+from io import BytesIO
 import numpy as np
 
 def isurl(path):
@@ -17,6 +17,6 @@ def loadtxt(path, **kwargs):
     """
     if isurl(path):
         data = HTTPArray(path)
-        return np.loadtxt(StringIO(data[:]), **kwargs)
+        return np.loadtxt(BytesIO(data[:]), **kwargs)
     return np.loadtxt(path, **kwargs)
 loadtxt.__doc__ += np.loadtxt.__doc__

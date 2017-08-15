@@ -21,6 +21,6 @@ setup(name='thingking',
       author='Matthew Turk <matthewturk@gmail.com>, Samuel Skillman <samskillman@gmail.com>, Michael S. Warren <mswarren@gmail.com>',
       license='BSD',
       packages=["thingking"],
-      install_requires=["requests", "numpy", "functools32"],
+      install_requires=["requests", "numpy"],
       ext_modules = cythonize(modules),
 )
