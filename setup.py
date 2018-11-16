@@ -3,7 +3,7 @@ from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Build import cythonize
 from Cython.Build.Dependencies import create_extension_list
-version = '1.1.0'
+version = '1.1.1'
 README = os.path.join(os.path.dirname(__file__), 'README.md')
 long_description = open(README).read() + '\n'
 
