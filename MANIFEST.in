@@ -1,1 +1,2 @@
 include README* CREDITS COPYING.txt CITATION
+recursive-include thingking *.py *.pyx *.pxd
